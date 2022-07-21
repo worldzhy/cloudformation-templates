@@ -1,0 +1,8 @@
+:xrefstyle: short
+
+This Quick Start provides one deployment option:
+
+* *Deploy {partner-product-short-name}.*
+//into an AWS Region other than AWS GovCloud (US).
+You build a new AWS environment consisting of a new VPC, subnets, NAT gateways, security groups, and other infrastructure components. You then deploy {partner-product-short-name} into this VPC. With this Quick Start's template, you can configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and {partner-product-short-name} settings, as discussed later in this guide.
+//* *Deploy {partner-product-short-name} into AWS GovCloud (US)*. This option provisions this architecture in the https://aws.amazon.com/govcloud-us/[AWS GovCloud (US-West) Region^].

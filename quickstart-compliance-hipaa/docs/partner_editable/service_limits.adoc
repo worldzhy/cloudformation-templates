@@ -1,0 +1,12 @@
+// Replace the <n> in each row to specify the number of resources used in this deployment. Remove the rows for resources that aren’t used.
+|===
+|Resource |This deployment uses
+
+// Space needed to maintain table headers
+|VPCs |3
+|Elastic IP addresses |2
+|S3 buckets |3
+|IAM roles |3
+|IAM instance profile |1
+|SNS topic |1
+|===

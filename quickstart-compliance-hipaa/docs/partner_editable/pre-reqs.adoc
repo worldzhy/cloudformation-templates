@@ -1,0 +1,9 @@
+==== Prepare for the deployment
+
+Ensure that at least one Amazon IAM service-linked role for AWS Config exists in your AWS account where you plan to deploy the Quick Start. Make note of the Amazon Resource Name (ARN). You need it during deployment. 
+
+For more information:
+
+* https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-service.html[Creating a role to delegate permissions to an AWS service^]
+* https://docs.aws.amazon.com/config/latest/developerguide/iamrole-permissions.html[Permissions for the IAM role assigned to AWS Config^]
+

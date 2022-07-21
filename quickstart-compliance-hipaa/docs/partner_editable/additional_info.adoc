@@ -1,0 +1,44 @@
+// Add steps as necessary for accessing the software, post-configuration, and testing. Don’t include full usage instructions for your software, but add links to your product documentation for that information.
+//Should any sections not be applicable, remove them
+
+// == Test the deployment
+// If steps are required to test the deployment, add them here. If not, remove the heading
+
+// == Post-deployment steps
+// If post-deployment steps are required, add them here. If not, remove the heading
+
+// == Best practices for using {partner-product-short-name} on AWS
+// Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
+
+// _Add any best practices for using the software._
+
+== Resources
+
+*AWS security:*
+
+* https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/centralized-egress-to-internet.html[Centralized egress to internet^]
+* https://aws.amazon.com/blogs/networking-and-content-delivery/creating-a-single-internet-exit-point-from-multiple-vpcs-using-aws-transit-gateway/[Creating a single internet exit point from multiple VPCs using AWS Transit Gateway^]
+* https://docs.aws.amazon.com/config/latest/developerguide/operational-best-practices-for-hipaa_security.html[Operational Best Practices for HIPAA Security^]
+* https://docs.aws.amazon.com/config/latest/developerguide/conformancepack-sample-templates.html[Conformance Pack Sample Templates^]
+
+*AWS resources:*
+
+* https://aws.amazon.com/getting-started/[Getting Started with AWS^]
+* https://docs.aws.amazon.com/general/latest/gr/[AWS General Reference^]
+* https://docs.aws.amazon.com/general/latest/gr/glos-chap.html[AWS glossary^]
+
+*AWS services:*
+
+* https://docs.aws.amazon.com/cloudformation/[AWS CloudFormation Documentation^]
+* https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html[What Is AWS CloudTrail?^] 
+* https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html[What Is Amazon CloudWatch?^]
+* https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html[What Is AWS Config?^]
+* https://docs.aws.amazon.com/AmazonS3/latest/user-guide/what-is-s3.html[What is Amazon S3?^]
+* https://docs.aws.amazon.com/iam/[AWS Identity and Access Management Documentation^]
+* https://docs.aws.amazon.com/vpc/[Amazon Virtual Private Cloud Documentation^]
+
+*HIPAA:*
+
+* https://aws.amazon.com/compliance/hipaa-compliance/[HIPAA Compliance^] (AWS website)
+* https://aws.amazon.com/artifact/getting-started/#BAA_Agreements[Getting Started with AWS Artifact^]
+* https://d0.awsstatic.com/whitepapers/compliance/AWS_HIPAA_Compliance_Whitepaper.pdf[Architecting for HIPAA Security and Compliance on Amazon Web Services^]
