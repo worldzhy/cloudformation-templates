@@ -1,0 +1,175 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: This template deploys a .NET CI/CD environment via AWS Fargate (qs-1sctmf6go)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9006
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Quick Start parameters
+        Parameters:
+          - QSS3BucketName
+          - QSS3KeyPrefix
+    ParameterLabels:
+      QSS3BucketName:
+        default: "Quick Start S3 bucket name"
+      QSS3KeyPrefix:
+        default: "Quick Start S3 key prefix"
+
+## Parameters
+Parameters:
+  QSS3BucketName:
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription:
+      The Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a 
+      hyphen (-).
+    Default: aws-quickstart-077767357755
+    Description:
+      'Name of the S3 bucket for your copy of the Quick Start assets. 
+      Keep the default name unless you are customizing the template. 
+      Changing the name updates code references to point to a new Quick 
+      Start location. This name can include numbers, lowercase letters, 
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-). 
+      See https://aws-quickstart.github.io/option1.html.'
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: '^[0-9a-zA-Z-/]*$'
+    ConstraintDescription:
+      The Quick Start S3 key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slashes (/).
+    Default: quickstart-code-commit-build/
+    Description:
+      'S3 key prefix that is used to simulate a directory for your copy of the 
+      Quick Start assets. Keep the default prefix unless you are customizing 
+      the template. Changing this prefix updates code references to point to 
+      a new Quick Start location. This prefix can include numbers, lowercase 
+      letters, uppercase letters, hyphens (-), and forward slashes (/). 
+      See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html 
+      and https://aws-quickstart.github.io/option1.html.'
+    Type: String
+
+## Mappings
+Mappings:
+  CodeBuildImages:
+    Nestjs:
+      ImageName: aws/codebuild/standard:5.0
+
+## Conditions
+Conditions:
+  GlobalRegions: !Equals [!Ref AWS::Partition, aws]
+  ChinaRegions: !Equals [!Ref AWS::Partition, aws-cn]
+  UsGovRegions: !Equals [!Ref AWS::Partition, aws-us-gov]
+
+## Resources    
+Resources:
+## S3 Bucket for Artifacts and State
+  ArtifactStore:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - BucketKeyEnabled: false
+      VersioningConfiguration:
+        Status: Enabled
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-ArtifactStoreBucket            
+        - Key: Application
+          Value: !Ref 'AWS::StackName'        
+
+## IAM Roles
+  # CodeBuild
+  CodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyWildcardResource
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - ecr:GetAuthorizationToken
+              - Resource: !Sub arn:${AWS::Partition}:s3:::${ArtifactStore}/*
+                Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:GetObjectVersion
+              - Resource: !Sub arn:${AWS::Partition}:ecr:${AWS::Region}:${AWS::AccountId}:repository/${ImageRepository}
+                Effect: Allow
+                Action:
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:BatchGetImage
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:PutImage
+                  - ecr:InitiateLayerUpload
+                  - ecr:UploadLayerPart
+                  - ecr:CompleteLayerUpload
+
+## CI/CD
+  # CodeCommit and initial population
+  SourceRepository:
+    Type: AWS::CodeCommit::Repository
+    Properties: 
+      RepositoryName: !Sub ${AWS::StackName}-repo
+      RepositoryDescription: Hosts the code used for the Fargate application.
+      Code:
+        BranchName: main
+        S3:
+          Bucket: !Ref QSS3BucketName
+          Key: !Sub ${QSS3KeyPrefix}src.zip
+
+  # CodeBuild 
+  CodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Source:
+        Type: CODECOMMIT
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_LARGE
+        PrivilegedMode: true # Allows access to Docker daemon
+        Image: !FindInMap [ CodeBuildImages, Nestjs, ImageName ]
+        EnvironmentVariables:
+          - Name: AWS_ACCOUNT_ID
+            Value: !Ref AWS::AccountId
+          - Name: AWS_DEFAULT_REGION
+            Value: !Ref AWS::Region
+          - Name: AWS_HOSTNAME
+            Value: !If [ChinaRegions, 'amazonaws.com.cn', 'amazonaws.com']
+          - Name: REPOSITORY_URI
+            Value: !GetAtt ImageRepository.RepositoryUri
+      Name: !Ref AWS::StackName
+      ServiceRole: !Ref CodeBuildServiceRole
+
+  
+## Outputs     
+Outputs:
+  RepoUrl:
+    Description: The URL for the CodeCommit repository.
+    Value: !GetAtt SourceRepository.CloneUrlHttp
