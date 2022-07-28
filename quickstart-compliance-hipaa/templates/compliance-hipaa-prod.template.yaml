@@ -152,9 +152,9 @@ Resources:
       RouteTableId: !Ref ProductionPrivateRouteTable1
       SubnetId: !Ref ProductionCoreSubnet2
 Outputs:
-  ProductionCoreSubnet1:
+  ProductionPrivateSubnet1:
     Value: !Ref ProductionCoreSubnet1
-  ProductionCoreSubnet2:
+  ProductionPrivateSubnet2:
     Value: !Ref ProductionCoreSubnet2
   ProductionVPC:
     Value: !Ref ProductionVPC

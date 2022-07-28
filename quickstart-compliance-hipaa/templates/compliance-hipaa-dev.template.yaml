@@ -152,9 +152,9 @@ Resources:
       RouteTableId: !Ref DevPrivateRouteTable1
       SubnetId: !Ref DevCoreSubnet2
 Outputs:
-  DevelopmentVPCSubnet1:
+  DevelopmentPrivateSubnet1:
     Value: !Ref DevCoreSubnet1
-  DevelopmentVPCSubnet2:
+  DevelopmentPrivateSubnet2:
     Value: !Ref DevCoreSubnet2
   DevelopmentVPC:
     Value: !Ref DevVPC

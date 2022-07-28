@@ -305,10 +305,14 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref ManagementNATGateway2
 Outputs:
-  ManagementCoreSubnet1:
+  ManagementPrivateSubnet1:
     Value: !Ref ManagementCoreSubnet1
-  ManagementCoreSubnet2:
+  ManagementPrivateSubnet2:
     Value: !Ref ManagementCoreSubnet2
+  ManagementDMZSubnet1:
+    Value: !Ref ManagementDMZSubnet1
+  ManagementDMZSubnet2:
+    Value: !Ref ManagementDMZSubnet2
   ManagementVPC:
     Value: !Ref ManagementVPC
   ManagementPrivateRouteTable1:
