@@ -32,18 +32,18 @@ Metadata:
       - LifecycleTransitionGlacierDays
       - CloudTrailLogRetentionDays
     - Label:
-        default: Development VPC configuration
+        default: Staging VPC configuration
       Parameters:
-      - DevVPCCIDRBlock
-      - DevVPCSubnet1
-      - DevVPCSubnet2
-      - DevVPCFlowLogLogGroupRetention
+      - StagingVPCCIDRBlock
+      - StagingVPCPrivateSubnet1
+      - StagingVPCPrivateSubnet2
+      - StagingVPCFlowLogLogGroupRetention
     - Label:
         default: Production VPC configuration
       Parameters:
       - ProdVPCCIDRBlock
-      - ProdVPCSubnet1
-      - ProdVPCSubnet2
+      - ProdVPCPrivateSubnet1
+      - ProdVPCPrivateSubnet2
       - ProdVPCFlowLogLogGroupRetention
     - Label:
         default: Management VPC configuration
@@ -77,19 +77,19 @@ Metadata:
         default: S3 Lifecycle transition-to-S3-Glacier days
       CloudTrailLogRetentionDays:
         default: CloudTrail log-retention days
-      DevVPCCIDRBlock:
-        default: Development VPC CIDR block
-      DevVPCSubnet1:
-        default: Development VPC subnet 1 CIDR block
-      DevVPCSubnet2:
-        default: Development VPC subnet 2 CIDR block
-      DevVPCFlowLogLogGroupRetention:
-        default: Development VPC flow-log log-group retention
+      StagingVPCCIDRBlock:
+        default: Staging VPC CIDR block
+      StagingVPCPrivateSubnet1:
+        default: Staging VPC subnet 1 CIDR block
+      StagingVPCPrivateSubnet2:
+        default: Staging VPC subnet 2 CIDR block
+      StagingVPCFlowLogLogGroupRetention:
+        default: Staging VPC flow-log log-group retention
       ProdVPCCIDRBlock:
         default: Production VPC CIDR block
-      ProdVPCSubnet1:
+      ProdVPCPrivateSubnet1:
         default: Production subnet 1 CIDR block
-      ProdVPCSubnet2:
+      ProdVPCPrivateSubnet2:
         default: Production subnet 2 CIDR block
       ProdVPCFlowLogLogGroupRetention:
         default: Production VPC flow-log log-group retention
@@ -136,31 +136,31 @@ Parameters:
     Type: Number
     Default: 90
     Description: Number of days that CloudTrail logs are retained.
-  DevVPCCIDRBlock:
+  StagingVPCCIDRBlock:
     Type: String
     Default: 172.18.0.0/16
-    Description: CIDR block for the development VPC.
-  DevVPCSubnet1:
+    Description: CIDR block for the staging VPC.
+  StagingVPCPrivateSubnet1:
     Type: String
     Default: 172.18.11.0/24
-    Description: CIDR block for subnet 1 in the development VPC.
-  DevVPCSubnet2:
+    Description: CIDR block for subnet 1 in the staging VPC.
+  StagingVPCPrivateSubnet2:
     Type: String
     Default: 172.18.12.0/24
-    Description: CIDR block for subnet 2 in the development VPC.
-  DevVPCFlowLogLogGroupRetention:
+    Description: CIDR block for subnet 2 in the staging VPC.
+  StagingVPCFlowLogLogGroupRetention:
     Type: Number
     Default: 90
-    Description: Number of days that the flow-log log group is retained for the development VPC.
+    Description: Number of days that the flow-log log group is retained for the staging VPC.
   ProdVPCCIDRBlock:
     Type: String
     Default: 172.17.0.0/16
     Description: CIDR block for the production VPC.
-  ProdVPCSubnet1:
+  ProdVPCPrivateSubnet1:
     Type: String
     Default: 172.17.11.0/24
     Description: CIDR block for subnet 1 in the production VPC.
-  ProdVPCSubnet2:
+  ProdVPCPrivateSubnet2:
     Type: String
     Default: 172.17.12.0/24
     Description: CIDR block for subnet 2 in the production VPC.
@@ -273,22 +273,22 @@ Resources:
         LifecycleTransitionStandardIADays: !Ref LifecycleTransitionStandardIADays
         LifecycleTransitionGlacierDays: !Ref LifecycleTransitionGlacierDays
         CloudTrailLogRetentionDays: !Ref CloudTrailLogRetentionDays
-  DevStack:
+  StagingStack:
     Type: 'AWS::CloudFormation::Stack'
     DependsOn: [ ConfigStack, LogStack, MgmtStack ]
     Properties:
       TemplateURL: 
         !Sub 
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/compliance-hipaa-dev.template.yaml'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/compliance-hipaa-staging.template.yaml'
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
       TimeoutInMinutes: 60
       Parameters:
-        DevVPCCIDRBlock: !Ref DevVPCCIDRBlock
-        DevVPCSubnet1: !Ref DevVPCSubnet1
-        DevVPCSubnet2: !Ref DevVPCSubnet2
-        DevVPCFlowLogLogGroupRetention: !Ref DevVPCFlowLogLogGroupRetention
+        StagingVPCCIDRBlock: !Ref StagingVPCCIDRBlock
+        StagingVPCPrivateSubnet1: !Ref StagingVPCPrivateSubnet1
+        StagingVPCPrivateSubnet2: !Ref StagingVPCPrivateSubnet2
+        StagingVPCFlowLogLogGroupRetention: !Ref StagingVPCFlowLogLogGroupRetention
   ProdStack:
     Type: 'AWS::CloudFormation::Stack'
     DependsOn: [ ConfigStack, LogStack, MgmtStack ]
@@ -302,8 +302,8 @@ Resources:
       TimeoutInMinutes: 60
       Parameters:
         ProdVPCCIDRBlock: !Ref ProdVPCCIDRBlock
-        ProdVPCSubnet1: !Ref ProdVPCSubnet1
-        ProdVPCSubnet2: !Ref ProdVPCSubnet2
+        ProdVPCPrivateSubnet1: !Ref ProdVPCPrivateSubnet1
+        ProdVPCPrivateSubnet2: !Ref ProdVPCPrivateSubnet2
         ProdVPCFlowLogLogGroupRetention: !Ref ProdVPCFlowLogLogGroupRetention
   MgmtStack:
     Type: 'AWS::CloudFormation::Stack'
@@ -334,36 +334,36 @@ Resources:
             QSS3KeyPrefix: !Ref QSS3KeyPrefix
       TimeoutInMinutes: 60
       Parameters:
-        DevVPCCIDRBlock: !Ref DevVPCCIDRBlock
+        StagingVPCCIDRBlock: !Ref StagingVPCCIDRBlock
         ProdVPCCIDRBlock: !Ref ProdVPCCIDRBlock
-        DevelopmentVPC:
+        StagingVPC:
           Fn::GetAtt: 
-          - DevStack
-          - Outputs.DevelopmentVPC
-        DevelopmentVPCSubnet1:
+          - StagingStack
+          - Outputs.StagingVPC
+        StagingPrivateSubnet1:
           Fn::GetAtt: 
-          - DevStack
-          - Outputs.DevelopmentVPCSubnet1
-        DevelopmentVPCSubnet2:
+          - StagingStack
+          - Outputs.StagingPrivateSubnet1
+        StagingPrivateSubnet2:
           Fn::GetAtt: 
-          - DevStack
-          - Outputs.DevelopmentVPCSubnet2
-        DevelopmentPrivateRouteTable1:
+          - StagingStack
+          - Outputs.StagingPrivateSubnet2
+        StagingPrivateRouteTable1:
           Fn::GetAtt: 
-          - DevStack
-          - Outputs.DevelopmentPrivateRouteTable1
+          - StagingStack
+          - Outputs.StagingPrivateRouteTable1
         ProductionVPC:
           Fn::GetAtt: 
           - ProdStack
           - Outputs.ProductionVPC
-        ProductionCoreSubnet1:
+        ProductionPrivateSubnet1:
           Fn::GetAtt: 
           - ProdStack
-          - Outputs.ProductionCoreSubnet1
-        ProductionCoreSubnet2:
+          - Outputs.ProductionPrivateSubnet1
+        ProductionPrivateSubnet2:
           Fn::GetAtt: 
           - ProdStack
-          - Outputs.ProductionCoreSubnet2
+          - Outputs.ProductionPrivateSubnet2
         ProductionPrivateRouteTable1:
           Fn::GetAtt: 
           - ProdStack
@@ -372,14 +372,14 @@ Resources:
           Fn::GetAtt: 
           - MgmtStack
           - Outputs.ManagementVPC
-        ManagementCoreSubnet1:
+        ManagementPrivateSubnet1:
           Fn::GetAtt: 
           - MgmtStack
-          - Outputs.ManagementCoreSubnet1
-        ManagementCoreSubnet2:
+          - Outputs.ManagementPrivateSubnet1
+        ManagementPrivateSubnet2:
           Fn::GetAtt: 
           - MgmtStack
-          - Outputs.ManagementCoreSubnet2
+          - Outputs.ManagementPrivateSubnet2
         ManagementPrivateRouteTable1:
           Fn::GetAtt: 
           - MgmtStack

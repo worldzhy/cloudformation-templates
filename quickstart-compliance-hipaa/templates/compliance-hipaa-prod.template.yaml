@@ -13,15 +13,15 @@ Metadata:
         default: Production VPC configuration
       Parameters:
       - ProdVPCCIDRBlock
-      - ProdVPCSubnet1
-      - ProdVPCSubnet2
+      - ProdVPCPrivateSubnet1
+      - ProdVPCPrivateSubnet2
       - ProdVPCFlowLogLogGroupRetention
     ParameterLabels:
       ProdVPCCIDRBlock:
         default: Production VPC CIDR block
-      ProdVPCSubnet1:
+      ProdVPCPrivateSubnet1:
         default: Production Subnet 1 CIDR block
-      ProdVPCSubnet2:
+      ProdVPCPrivateSubnet2:
         default: Production Subnet 2 CIDR block
       ProdVPCFlowLogLogGroupRetention:
         default: Production VPC log group retention days
@@ -30,11 +30,11 @@ Parameters:
     Type: String
     Description: Production VPC CIDR block.
     AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
-  ProdVPCSubnet1:
+  ProdVPCPrivateSubnet1:
     Type: String
     Description: Production VPC private subnet 1.
     AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
-  ProdVPCSubnet2:
+  ProdVPCPrivateSubnet2:
     Type: String
     Description: Production VPC private subnet 2.
     AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
@@ -108,10 +108,10 @@ Resources:
           Value: Production VPC Flow Logs
         - Key: Purpose
           Value: Networking
-  ProductionCoreSubnet1:
+  ProductionPrivateSubnet1:
     Type: 'AWS::EC2::Subnet'
     Properties:
-      CidrBlock: !Ref ProdVPCSubnet1
+      CidrBlock: !Ref ProdVPCPrivateSubnet1
       VpcId: !Ref ProductionVPC
       AvailabilityZone: !Select [ 0, !GetAZs "" ]
       MapPublicIpOnLaunch: false
@@ -120,10 +120,10 @@ Resources:
           Value: Production Core Subnet 1
         - Key: Purpose
           Value: Networking
-  ProductionCoreSubnet2:
+  ProductionPrivateSubnet2:
     Type: 'AWS::EC2::Subnet'
     Properties:
-      CidrBlock: !Ref ProdVPCSubnet2
+      CidrBlock: !Ref ProdVPCPrivateSubnet2
       VpcId: !Ref ProductionVPC
       AvailabilityZone: !Select [ 1, !GetAZs "" ]
       MapPublicIpOnLaunch: false
@@ -145,17 +145,17 @@ Resources:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
       RouteTableId: !Ref ProductionPrivateRouteTable1
-      SubnetId: !Ref ProductionCoreSubnet1
+      SubnetId: !Ref ProductionPrivateSubnet1
   ProductionCore2RouteAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
       RouteTableId: !Ref ProductionPrivateRouteTable1
-      SubnetId: !Ref ProductionCoreSubnet2
+      SubnetId: !Ref ProductionPrivateSubnet2
 Outputs:
   ProductionPrivateSubnet1:
-    Value: !Ref ProductionCoreSubnet1
+    Value: !Ref ProductionPrivateSubnet1
   ProductionPrivateSubnet2:
-    Value: !Ref ProductionCoreSubnet2
+    Value: !Ref ProductionPrivateSubnet2
   ProductionVPC:
     Value: !Ref ProductionVPC
   ProductionPrivateRouteTable1:

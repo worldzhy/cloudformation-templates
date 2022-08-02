@@ -10,9 +10,9 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Development VPC configuration
+        default: Staging VPC configuration
       Parameters:
-      - DevVPCCIDRBlock
+      - StagingVPCCIDRBlock
     - Label:
         default: Production VPC configuration
       Parameters:
@@ -20,47 +20,47 @@ Metadata:
     - Label:
         default: Imported parameters
       Parameters:
-      - DevelopmentVPC
-      - DevelopmentVPCSubnet1
-      - DevelopmentVPCSubnet2
-      - DevelopmentPrivateRouteTable1
+      - StagingVPC
+      - StagingPrivateSubnet1
+      - StagingPrivateSubnet2
+      - StagingPrivateRouteTable1
       - ProductionVPC
-      - ProductionCoreSubnet1
-      - ProductionCoreSubnet2
+      - ProductionPrivateSubnet1
+      - ProductionPrivateSubnet2
       - ProductionPrivateRouteTable1
       - ManagementVPC
-      - ManagementCoreSubnet1
-      - ManagementCoreSubnet2
+      - ManagementPrivateSubnet1
+      - ManagementPrivateSubnet2
       - ManagementPrivateRouteTable1
       - ManagementPrivateRouteTable2
       - ManagementPublicRouteTable1
       - ManagementPublicRouteTable2
     ParameterLabels:
-      DevVPCCIDRBlock:
-        default: Development VPC CIDR block
+      StagingVPCCIDRBlock:
+        default: Staging VPC CIDR block
       ProdVPCCIDRBlock:
         default: Production VPC CIDR block
-      DevelopmentVPC:
-        default: Development VPC
-      DevelopmentVPCSubnet1:
-        default: Development VPC subnet 1
-      DevelopmentVPCSubnet2:
-        default: Development VPC subnet 2
-      DevelopmentPrivateRouteTable1:
-        default: Development VPC private route table 1
+      StagingVPC:
+        default: Staging VPC
+      StagingPrivateSubnet1:
+        default: Staging VPC subnet 1
+      StagingPrivateSubnet2:
+        default: Staging VPC subnet 2
+      StagingPrivateRouteTable1:
+        default: Staging VPC private route table 1
       ProductionVPC:
         default: Production VPC
-      ProductionCoreSubnet1:
+      ProductionPrivateSubnet1:
         default: Production VPC private subnet 1
-      ProductionCoreSubnet2:
+      ProductionPrivateSubnet2:
         default: Production VPC private subnet 2
       ProductionPrivateRouteTable1:
         default: Production VPC private route table 1
       ManagementVPC:
         default: Management VPC
-      ManagementCoreSubnet1:
+      ManagementPrivateSubnet1:
         default: Management VPC private subnet 1
-      ManagementCoreSubnet2:
+      ManagementPrivateSubnet2:
         default: Management VPC private subnet 2
       ManagementPrivateRouteTable1:
         default: Management VPC private route table 1
@@ -71,25 +71,25 @@ Metadata:
       ManagementPublicRouteTable2:
         default: Management VPC public route table 2
 Parameters:
-  DevelopmentVPC:
+  StagingVPC:
     Type: String
-    Description: Development VPC.
-  DevelopmentVPCSubnet1:
+    Description: Staging VPC.
+  StagingPrivateSubnet1:
     Type: String
-    Description: Development VPC private subnet 1.
-  DevelopmentVPCSubnet2:
+    Description: Staging VPC private subnet 1.
+  StagingPrivateSubnet2:
     Type: String
-    Description: Development VPC private subnet 2.
-  DevelopmentPrivateRouteTable1:
+    Description: Staging VPC private subnet 2.
+  StagingPrivateRouteTable1:
     Type: String
-    Description: Development VPC private route table 1.
+    Description: Staging VPC private route table 1.
   ProductionVPC:
     Type: String
     Description: Production VPC.
-  ProductionCoreSubnet1:
+  ProductionPrivateSubnet1:
     Type: String
     Description: Production VPC private subnet 1.
-  ProductionCoreSubnet2:
+  ProductionPrivateSubnet2:
     Type: String
     Description: Production VPC private subnet 2.
   ProductionPrivateRouteTable1:
@@ -98,10 +98,10 @@ Parameters:
   ManagementVPC:
     Type: String
     Description: Management VPC.
-  ManagementCoreSubnet1:
+  ManagementPrivateSubnet1:
     Type: String
     Description: Management VPC private subnet 1.
-  ManagementCoreSubnet2:
+  ManagementPrivateSubnet2:
     Type: String
     Description: Management VPC private subnet 2.
   ManagementPrivateRouteTable1:
@@ -116,10 +116,10 @@ Parameters:
   ManagementPublicRouteTable2:
     Type: String
     Description: Management VPC public route table 2.
-  DevVPCCIDRBlock:
+  StagingVPCCIDRBlock:
     Type: String
     AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
-    Description: Development VPC CIDR block.
+    Description: Staging VPC CIDR block.
   ProdVPCCIDRBlock:
     Type: String
     AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
@@ -143,8 +143,8 @@ Resources:
     Type: 'AWS::EC2::TransitGatewayAttachment'
     Properties:
       SubnetIds:
-        - !Ref ManagementCoreSubnet1
-        - !Ref ManagementCoreSubnet2
+        - !Ref ManagementPrivateSubnet1
+        - !Ref ManagementPrivateSubnet2
       TransitGatewayId: !Ref HIPAATransitGateway
       VpcId: !Ref ManagementVPC
       Tags:
@@ -156,8 +156,8 @@ Resources:
     Type: 'AWS::EC2::TransitGatewayAttachment'
     Properties:
       SubnetIds:
-        - !Ref ProductionCoreSubnet1
-        - !Ref ProductionCoreSubnet2
+        - !Ref ProductionPrivateSubnet1
+        - !Ref ProductionPrivateSubnet2
       TransitGatewayId: !Ref HIPAATransitGateway
       VpcId: !Ref ProductionVPC
       Tags:
@@ -165,17 +165,17 @@ Resources:
           Value: Production Transit Gateway Attachment
         - Key: Purpose
           Value: Networking
-  DevVPCtoTransitGateway:
+  StagingVPCtoTransitGateway:
     Type: 'AWS::EC2::TransitGatewayAttachment'
     Properties:
       SubnetIds:
-        - !Ref DevelopmentVPCSubnet1
-        - !Ref DevelopmentVPCSubnet2
+        - !Ref StagingPrivateSubnet1
+        - !Ref StagingPrivateSubnet2
       TransitGatewayId: !Ref HIPAATransitGateway
-      VpcId: !Ref DevelopmentVPC
+      VpcId: !Ref StagingVPC
       Tags:
         - Key: Name
-          Value: Development Transit Gateway Attachment
+          Value: Staging Transit Gateway Attachment
         - Key: Purpose
           Value: Networking
   TransitGatewayExternalRouteTable:
@@ -206,10 +206,10 @@ Resources:
     Properties:
       TransitGatewayAttachmentId: !Ref ProductionVPCtoTransitGateway
       TransitGatewayRouteTableId: !Ref TransitGatewayInternalRouteTable
-  TransitGatewayDevelopmentVPCRouteTableAssociation:
+  TransitGatewayStagingVPCRouteTableAssociation:
     Type: 'AWS::EC2::TransitGatewayRouteTableAssociation'
     Properties:
-      TransitGatewayAttachmentId: !Ref DevVPCtoTransitGateway
+      TransitGatewayAttachmentId: !Ref StagingVPCtoTransitGateway
       TransitGatewayRouteTableId: !Ref TransitGatewayInternalRouteTable
   TransitGatewayInternalRouteProp1:
     Type: 'AWS::EC2::TransitGatewayRouteTablePropagation'
@@ -219,7 +219,7 @@ Resources:
   TransitGatewayInternalRouteProp2:
     Type: 'AWS::EC2::TransitGatewayRouteTablePropagation'
     Properties:
-      TransitGatewayAttachmentId: !Ref DevVPCtoTransitGateway
+      TransitGatewayAttachmentId: !Ref StagingVPCtoTransitGateway
       TransitGatewayRouteTableId: !Ref TransitGatewayInternalRouteTable
   TransitGatewayExternalRouteProp1:
     Type: 'AWS::EC2::TransitGatewayRouteTablePropagation'
@@ -242,8 +242,8 @@ Resources:
     Type: 'AWS::EC2::TransitGatewayRoute'
     Properties:
       TransitGatewayRouteTableId: !Ref TransitGatewayExternalRouteTable
-      DestinationCidrBlock: !Ref DevVPCCIDRBlock
-      TransitGatewayAttachmentId: !Ref DevVPCtoTransitGateway
+      DestinationCidrBlock: !Ref StagingVPCCIDRBlock
+      TransitGatewayAttachmentId: !Ref StagingVPCtoTransitGateway
   ManagementPrivateSubnet1Route1:
     Type: 'AWS::EC2::Route'
     Properties:
@@ -256,7 +256,7 @@ Resources:
     Type: 'AWS::EC2::Route'
     Properties:
       RouteTableId: !Ref ManagementPrivateRouteTable1
-      DestinationCidrBlock: !Ref DevVPCCIDRBlock
+      DestinationCidrBlock: !Ref StagingVPCCIDRBlock
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
       - ManagementVPCtoTransitGateway
@@ -272,7 +272,7 @@ Resources:
     Type: 'AWS::EC2::Route'
     Properties:
       RouteTableId: !Ref ManagementPrivateRouteTable2
-      DestinationCidrBlock: !Ref DevVPCCIDRBlock
+      DestinationCidrBlock: !Ref StagingVPCCIDRBlock
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
       - ManagementVPCtoTransitGateway
@@ -288,7 +288,7 @@ Resources:
     Type: 'AWS::EC2::Route'
     Properties:
       RouteTableId: !Ref ManagementPublicRouteTable1
-      DestinationCidrBlock: !Ref DevVPCCIDRBlock
+      DestinationCidrBlock: !Ref StagingVPCCIDRBlock
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
       - ManagementVPCtoTransitGateway
@@ -304,18 +304,18 @@ Resources:
     Type: 'AWS::EC2::Route'
     Properties:
       RouteTableId: !Ref ManagementPublicRouteTable2
-      DestinationCidrBlock: !Ref DevVPCCIDRBlock
+      DestinationCidrBlock: !Ref StagingVPCCIDRBlock
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
       - ManagementVPCtoTransitGateway
-  DevelopmentVPCDefaultRoute:
+  StagingVPCDefaultRoute:
     Type: 'AWS::EC2::Route'
     Properties:
-      RouteTableId: !Ref DevelopmentPrivateRouteTable1
+      RouteTableId: !Ref StagingPrivateRouteTable1
       DestinationCidrBlock: 0.0.0.0/0
       TransitGatewayId: !Ref HIPAATransitGateway
     DependsOn:
-      - DevVPCtoTransitGateway
+      - StagingVPCtoTransitGateway
   ProductionVPCDefaultRoute:
     Type: 'AWS::EC2::Route'
     Properties:
