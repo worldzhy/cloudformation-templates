@@ -31,11 +31,11 @@
 
 
         "SESIdentityARN": {
-            "Description": "SES Identity ARN. It is required during creating Pinpoint Email Channel.",
+            "Description": "This is the FromAddress ARN. It is required during creating Pinpoint Email Channel.",
             "Type": "String"
         },
         "FromAddress": {
-            "Description": "Address for sending emails.",
+            "Description": "Address that has been verified in SES.",
             "Type": "String"
         },
         "PinpointAlarmAppName": {
