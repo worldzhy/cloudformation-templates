@@ -31,7 +31,7 @@
 
 
         "SESIdentityARN": {
-            "Description": "SES Identity ARN.",
+            "Description": "SES Identity ARN. It is required during creating Pinpoint Email Channel.",
             "Type": "String"
         },
         "FromAddress": {
@@ -41,43 +41,29 @@
         "PinpointAlarmAppName": {
             "Description": "Name of the Pinpoint application for alarming.",
             "Type": "String",
-            "Default": "dev-inceptionpad-message-service-pinpoint-alarm",
-            "AllowedValues": [
-                "dev-inceptionpad-message-service-pinpoint-alarm",
-                "qa-inceptionpad-message-service-pinpoint-alarm",
-                "prod-inceptionpad-message-service-pinpoint-alarm"
-            ]
+            "Default": "inceptionpad-message-service-pinpoint-alarm"
         },
         "PinpointLevel1AppName": {
             "Description": "Name of the Pinpoint application level 1.",
             "Type": "String",
-            "Default": "dev-inceptionpad-message-service-pinpoint-level1",
-            "AllowedValues": [
-                "dev-inceptionpad-message-service-pinpoint-level1",
-                "qa-inceptionpad-message-service-pinpoint-level1",
-                "prod-inceptionpad-message-service-pinpoint-level1"
-            ]
+            "Default": "inceptionpad-message-service-pinpoint-level1"
         },
         "PinpointLevel2AppName": {
             "Description": "Name of the Pinpoint application level 2.",
             "Type": "String",
-            "Default": "dev-inceptionpad-message-service-pinpoint-level2",
-            "AllowedValues": [
-                "dev-inceptionpad-message-service-pinpoint-level2",
-                "qa-inceptionpad-message-service-pinpoint-level2",
-                "prod-inceptionpad-message-service-pinpoint-level2"
-            ]
+            "Default": "inceptionpad-message-service-pinpoint-level2"
         },
 
 
         "LambdaCodeS3BucketName": {
             "Description": "Name of S3 bucket for Lambda codes.",
-            "Type": "String"
+            "Type": "String",
+            "Default": "aws-quickstart-067174804713"
         },
         "EventStreamS3BucketName": {
             "Description": "Name of Event stream bucket which should be between 3 and 63 characters long.",
             "Type": "String",
-            "Default": "dev/qa/prod-message-service-eventstream-bucket"
+            "Default": "inceptionpad-message-service-eventstream-bucket"
         },
         "EventStreamS3Prefix": {
             "Description": "Name of the bucket using to store event stream.",
@@ -94,100 +80,63 @@
         "PinpointEventDeliveryStreamName": {
             "Description": "Name of the Pinpoint message event stream.",
             "Type": "String",
-            "Default": "dev-inceptionpad-message-service-pinpointevent-deliverystream",
-            "AllowedValues": [
-                "dev-inceptionpad-message-service-pinpointevent-deliverystream",
-                "qa-inceptionpad-message-service-pinpointevent-deliverystream",
-                "prod-inceptionpad-message-service-pinpointevent-deliverystream"
-            ]
+            "Default": "inceptionpad-message-service-pinpointevent-deliverystream"
         },
         "PinpointEventProcessorLambdaName": {
             "Description": "Name of the pinpoint events processor Lambda.",
             "Type": "String",
-            "Default": "dev-inceptionpad-message-service-pinpoint-event-processor",
-            "AllowedValues": [
-                "dev-inceptionpad-message-service-pinpoint-event-processor",
-                "qa-inceptionpad-message-service-pinpoint-event-processor",
-                "prod-inceptionpad-message-service-pinpoint-event-processor"
-            ]
+            "Default": "inceptionpad-message-service-pinpoint-event-processor"
         },
         "PinpointEventProcessorLambdaCodeArchiveName": {
-            "Description": "File name of the alarm Lambda code zip. Example: code-event-processor.zip",
-            "Type": "String"
+            "Description": "Path and file name of the alarm Lambda code zip. Example: If s3://aws-quickstart-067174804713/quickstart-message-tracker/pinpoint-event-receiver.zip , then fill 'quickstart-message-tracker/pinpoint-event-receiver.zip'",
+            "Type": "String",
+            "Default": "quickstart-message-tracker/pinpoint-event-receiver.zip"
         },
 
 
         "FinalDeadLetterSQSName": {
             "Description": "Name of the final dead-letter SQS.",
             "Type": "String",
-            "Default": "dev-inceptionpad-message-service-final-deadletter-queue",
-            "AllowedValues": [
-                "dev-inceptionpad-message-service-final-deadletter-queue",
-                "qa-inceptionpad-message-service-final-deadletter-queue",
-                "prod-inceptionpad-message-service-final-deadletter-queue"
-            ]
+            "Default": "inceptionpad-message-service-final-deadletter-queue"
         },
         "AlarmLambdaName": {
             "Description": "Name of the alarm Lambda.",
             "Type": "String",
-            "Default": "dev-inceptionpad-message-service-alarm-function",
-            "AllowedValues": [
-                "dev-inceptionpad-message-service-alarm-function",
-                "qa-inceptionpad-message-service-alarm-function",
-                "prod-inceptionpad-message-service-alarm-function"
-            ]
+            "Default": "inceptionpad-message-service-alarm-function"
         },
         "AlarmLambdaCodeArchiveName": {
             "Description": "File name of the alarm Lambda code zip. Example: code-alarm-function.zip",
-            "Type": "String"
+            "Type": "String",
+            "Default": "quickstart-message-tracker/alarm-message-sender.zip"
         },
-        
+
 
         "EmailSQSLevel2Name": {
             "Description": "Name of the SQS level 2.",
             "Type": "String",
-            "Default": "dev-inceptionpad-message-service-email-queue-level2",
-            "AllowedValues": [
-                "dev-inceptionpad-message-service-email-queue-level2",
-                "qa-inceptionpad-message-service-email-queue-level2",
-                "prod-inceptionpad-message-service-email-queue-level2"
-            ]
+            "Default": "inceptionpad-message-service-email-queue-level2"
         },
         "EmailSQSLevel1Name": {
             "Description": "Name of the SQS level 1.",
             "Type": "String",
-            "Default": "dev-inceptionpad-message-service-email-queue-level1",
-            "AllowedValues": [
-                "dev-inceptionpad-message-service-email-queue-level1",
-                "qa-inceptionpad-message-service-email-queue-level1",
-                "prod-inceptionpad-message-service-email-queue-level1"
-            ]
+            "Default": "inceptionpad-message-service-email-queue-level1"
         },
         "EmailShooterLevel1LambdaName": {
             "Description": "Name of the email shooter level 1 Lambda.",
             "Type": "String",
-            "Default": "dev-inceptionpad-message-service-email-shooter-level1",
-            "AllowedValues": [
-                "dev-inceptionpad-message-service-email-shooter-level1",
-                "qa-inceptionpad-message-service-email-shooter-level1",
-                "prod-inceptionpad-message-service-email-shooter-level1"
-            ]
+            "Default": "inceptionpad-message-service-email-shooter-level1"
         },
         "EmailShooterLevel2LambdaName": {
             "Description": "Name of the email shooter level 2 Lambda.",
             "Type": "String",
-            "Default": "dev-inceptionpad-message-service-email-shooter-level2",
-            "AllowedValues": [
-                "dev-inceptionpad-message-service-email-shooter-level2",
-                "qa-inceptionpad-message-service-email-shooter-level2",
-                "prod-inceptionpad-message-service-email-shooter-level2"
-            ]
+            "Default": "inceptionpad-message-service-email-shooter-level2"
         },
         "MessageShooterLambdaCodeArchiveName": {
             "Description": "File name of the alarm Lambda code zip. Example: code-message-shooter.zip",
-            "Type": "String"
+            "Type": "String",
+            "Default": "quickstart-message-tracker/pinpoint-message-sender.zip"
         }
-        
+
     },
     "Resources": {
         "EventStreamS3": {
@@ -204,12 +153,12 @@
                                         {
                                             "Name": "prefix",
                                             "Value" : { "Ref": "EventStreamS3Prefix" }
-                                        } 
+                                        }
                                     ]
-                                }  
-                            },                              
+                                }
+                            },
                             "Function" : { "Fn::GetAtt": [ "S3EventLambdaFunction", "Arn" ] }
-                        }                          
+                        }
                     ]
                 }
             },
@@ -230,7 +179,7 @@
                 },
                 "Policies": [
                     {
-                        "PolicyName": "dev-inceptionpad-message-service-deliverystream-role",
+                        "PolicyName": "inceptionpad-message-service-deliverystream-role",
                         "PolicyDocument": {
                             "Version": "2012-10-17",
                             "Statement": [
@@ -316,7 +265,7 @@
                 },
                 "Policies": [
                     {
-                        "PolicyName": "dev-inceptionpad-message-service-pinpoint-emailchannel-role",
+                        "PolicyName": "inceptionpad-message-service-pinpoint-emailchannel-role",
                         "PolicyDocument": {
                             "Version": "2012-10-17",
                             "Statement": [
@@ -376,7 +325,7 @@
                 "PinpointLevel2"
             ]
         },
-        
+
         "PinpointAlarm": {
             "Type" : "AWS::Pinpoint::App",
             "Properties" : {
@@ -426,7 +375,7 @@
                 },
                 "Policies": [
                     {
-                        "PolicyName": "dev-inceptionpad-message-service-pinpoint-level1-role",
+                        "PolicyName": "inceptionpad-message-service-pinpoint-level1-role",
                         "PolicyDocument": {
                             "Version": "2012-10-17",
                             "Statement": [
@@ -479,7 +428,7 @@
                 },
                 "Policies": [
                     {
-                        "PolicyName": "dev-inceptionpad-message-service-pinpoint-level2-role",
+                        "PolicyName": "inceptionpad-message-service-pinpoint-level2-role",
                         "PolicyDocument": {
                             "Version": "2012-10-17",
                             "Statement": [
@@ -549,7 +498,7 @@
                 ],
                 "Policies": [
                     {
-                        "PolicyName": "dev-inceptionpad-message-service-alarm-lambda-role",
+                        "PolicyName": "inceptionpad-message-service-alarm-lambda-role",
                         "PolicyDocument": {
                             "Version": "2012-10-17",
                             "Statement": [
@@ -635,7 +584,7 @@
                 ],
                 "Policies": [
                     {
-                        "PolicyName": "dev-inceptionpad-message-service-shooter-lambda-role",
+                        "PolicyName": "inceptionpad-message-service-shooter-lambda-role",
                         "PolicyDocument": {
                             "Version": "2012-10-17",
                             "Statement": [
@@ -817,7 +766,7 @@
                 "ManagedPolicyArns" : [ "arn:aws:iam::aws:policy/AWSLambdaExecute" ]
             }
         }
-          
+
     },
     "Outputs": {
         "EmailQueueUrl": {
