@@ -540,7 +540,6 @@
                 "Handler" : "index.handler",
                 "MemorySize" : 128,
                 "PackageType" : "Zip",
-                "ReservedConcurrentExecutions" : 100,
                 "Role" : { "Fn::GetAtt" : [ "AlarmLambdaRole", "Arn" ] },
                 "Runtime" : "nodejs14.x",
                 "Timeout" : 60
@@ -628,7 +627,6 @@
                 "Handler" : "index.handler",
                 "MemorySize" : 128,
                 "PackageType" : "Zip",
-                "ReservedConcurrentExecutions" : 100,
                 "Role" : { "Fn::GetAtt" : [ "ShooterLambdaRole", "Arn" ] },
                 "Runtime" : "nodejs14.x",
                 "Timeout" : 60
@@ -676,7 +674,6 @@
                 "Handler" : "index.handler",
                 "MemorySize" : 128,
                 "PackageType" : "Zip",
-                "ReservedConcurrentExecutions" : 10,
                 "Role" : { "Fn::GetAtt" : [ "ShooterLambdaRole" , "Arn" ] },
                 "Runtime" : "nodejs14.x",
                 "Timeout" : 60
@@ -740,7 +737,6 @@
                 "Handler" : "index.handler",
                 "MemorySize" : 128,
                 "PackageType" : "Zip",
-                "ReservedConcurrentExecutions" : 100,
                 "Role" : { "Fn::GetAtt" : [ "S3EventLambdaFunctionRole" , "Arn" ] },
                 "Runtime" : "nodejs14.x",
                 "Timeout" : 60
