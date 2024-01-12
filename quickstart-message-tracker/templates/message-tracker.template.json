@@ -90,7 +90,7 @@
         "PinpointEventProcessorLambdaCodeArchiveName": {
             "Description": "Path and file name of the alarm Lambda code zip. Example: If s3://aws-quickstart-067174804713/quickstart-message-tracker/pinpoint-event-receiver.zip , then fill 'quickstart-message-tracker/pinpoint-event-receiver.zip'",
             "Type": "String",
-            "Default": "quickstart-message-tracker/pinpoint-event-receiver.zip"
+            "Default": "quickstart-message-tracker/codes/pinpoint-event-receiver.zip"
         },
 
 
@@ -107,7 +107,7 @@
         "AlarmLambdaCodeArchiveName": {
             "Description": "File name of the alarm Lambda code zip. Example: code-alarm-function.zip",
             "Type": "String",
-            "Default": "quickstart-message-tracker/alarm-message-sender.zip"
+            "Default": "quickstart-message-tracker/codes/alarm-message-sender.zip"
         },
 
 
@@ -134,7 +134,7 @@
         "MessageShooterLambdaCodeArchiveName": {
             "Description": "File name of the alarm Lambda code zip. Example: code-message-shooter.zip",
             "Type": "String",
-            "Default": "quickstart-message-tracker/pinpoint-message-sender.zip"
+            "Default": "quickstart-message-tracker/codes/pinpoint-message-sender.zip"
         }
 
     },
