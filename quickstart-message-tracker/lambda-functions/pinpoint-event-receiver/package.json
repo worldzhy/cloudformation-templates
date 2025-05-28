@@ -15,6 +15,6 @@
   "license": "ISC",
   "dependencies": {
     "moment": "^2.29.1",
-    "pg": "^8.8.0"
+    "pg": "^8.16.0"
   }
 }
